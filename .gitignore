@@ -39,3 +39,11 @@
 
 # debug information files
 *.dwo
+
+# Editor backup / swap files
+*~
+*.swp
+*.swo
+*.un~
+*.tmp
+
