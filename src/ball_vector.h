@@ -3,6 +3,7 @@
 #define BALL_VECTOR_H
 #define PI 3.14159265358979323846
 #define GRAVITY_CONSTANT 32.174 //feet per second^2
+#define TIME_STEP 0.001 //seconds
 #include <iostream>
 #include <cmath>
 

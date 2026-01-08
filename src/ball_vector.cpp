@@ -47,5 +47,23 @@ double ballVector::getProjection(){
     double timeUntilImpact {getTimeUntilImpact()};
     std::cout << "time until impact: " << timeUntilImpact << std::endl;
     std::cout << "horizontal distance(feet): " << timeUntilImpact*h_velo << std::endl;
-    return 0.0;
+
+    double t {0.0};
+    double h_pos {0.0};
+    double v_pos {0.0};
+    while(true){
+        t += TIME_STEP;
+        if(t >= timeUntilImpact){
+            t = timeUntilImpact;
+            h_pos = timeUntilImpact * h_velo;
+            v_pos = 0.0;
+            std::cout << "IMPACT! Horizontal distance(feet): " << h_pos << std::endl;
+            break;
+        }
+        v_pos = v_velo * t - (0.5 * GRAVITY_CONSTANT * t*t);
+        h_pos = h_velo * t;
+        std::cout << "t = " << t << " horizontal position: " << h_pos;
+        std::cout << " --- vertical position: " << v_pos << std::endl;
+    }
+    return h_pos;
 }
