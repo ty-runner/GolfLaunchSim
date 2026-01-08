@@ -16,3 +16,22 @@ ballVector::ballVector(double velocity, double launchAngle, double dirAngle)
     std::cout << "Vector constructed with parameters\n";
 }
 
+double ballVector::getProjection(){
+    //1. convert launch angle to radians
+    double launchRad {(PI/180) * m_pair.m_launchAngle};
+    //2. convert dir angle to radians
+    double dirRad {(PI/180) * m_pair.m_directionAngle};
+
+    //3. get the cos and sine components of the launch angle
+    double vertical {std::sin(launchRad)};
+    double horizontal {std::cos(launchRad)};
+
+    //4. translate to velocity components
+    double v_velo {vertical * m_velocity};
+    double h_velo {horizontal * m_velocity};
+
+    std::cout << "horizontal speed: " << h_velo << std::endl;
+    std::cout << "vertical speed: " << v_velo << std::endl;
+
+    return 0.0;
+}
