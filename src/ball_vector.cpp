@@ -16,6 +16,16 @@ ballVector::ballVector(double velocity, double launchAngle, double dirAngle)
     std::cout << "Vector constructed with parameters\n";
 }
 
+double ballVector::getTimeUntilImpact(){
+    double launchRad {(PI/180) * m_pair.m_launchAngle};
+
+    double vertical {std::sin(launchRad)};
+
+    double v_velo {vertical * m_velocity};
+
+    double timeUntilImpact {v_velo / (0.5 * GRAVITY_CONSTANT)};
+    return timeUntilImpact;
+}
 double ballVector::getProjection(){
     //1. convert launch angle to radians
     double launchRad {(PI/180) * m_pair.m_launchAngle};
@@ -33,5 +43,9 @@ double ballVector::getProjection(){
     std::cout << "horizontal speed: " << h_velo << std::endl;
     std::cout << "vertical speed: " << v_velo << std::endl;
 
+    //5. determine time until ball hits the ground
+    double timeUntilImpact {getTimeUntilImpact()};
+    std::cout << "time until impact: " << timeUntilImpact << std::endl;
+    std::cout << "horizontal distance(feet): " << timeUntilImpact*h_velo << std::endl;
     return 0.0;
 }
