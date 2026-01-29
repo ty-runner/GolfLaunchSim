@@ -1,0 +1,8 @@
+clang++ main.cpp glad.c \
+  -Iglad/include \
+  -I/opt/homebrew/include \
+  -L/opt/homebrew/lib \
+  -lglfw \
+  -framework OpenGL \
+  -o app
+
