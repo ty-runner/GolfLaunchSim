@@ -1,0 +1,7 @@
+
+g++ main.cpp glad.c \
+    -I. \
+    -IGLFW/include \
+    -LGLFW/lib-mingw-w64 \
+    -lglfw3 -lopengl32 -lgdi32 \
+    -o app.exe
