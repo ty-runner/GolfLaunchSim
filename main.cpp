@@ -24,8 +24,15 @@ sockaddr_in udpAddr{};
 const unsigned int SCR_WIDTH  = 800;
 const unsigned int SCR_HEIGHT = 600;
 
+// ---------- spin / aerodynamics ----------
+glm::vec3 ballOmega(50.0f, 0.0f, 0.0f); // rad/s, right-hand rule
+
+// Simple aero coefficients (tune these)
+const float ballMass = 0.04593f;  // kg (golf ball ~45.9g)
+const float magnusK  = 1.2e-4f;   // scale for Magnus accel (tune)
+const float dragK    = 2.5e-4f;   // quadratic drag scale (tune)
 // ---------- simple camera state ----------
-glm::vec3 camPos   = glm::vec3(0.0f, 1.7f, 4.0f);        // eye height, behind ball
+glm::vec3 camPos   = glm::vec3(0.0f, 1.7f, 3.0f);        // eye height, behind ball
 glm::vec3 camFront = glm::normalize(glm::vec3(0.0f, -0.10f, -1.0f)); // slight downward tilt
 glm::vec3 camUp    = glm::vec3(0.0f, 1.0f, 0.0f);
 
@@ -34,7 +41,7 @@ float camPitch = 0.0f;
 
 // ---------- ball + trail ----------
 glm::vec3 ballPos(0.0f, 0.0f, 0.0f);
-glm::vec3 ballVel(0.0f, 10.0f, -6.0f); // initial velocity (edit as you like)
+glm::vec3 ballVel(0.0f, 100.0f, -6.0f); // initial velocity (edit as you like)
 
 const float gravity = 9.81f;
 const float groundY = 0.10f;
@@ -331,10 +338,25 @@ int main() {
             std::cout << "LAUNCHING BALL\n";
         }
         processInput(window, dt);
-
         // ---- simulate ball ----
+
+        // gravity
+        glm::vec3 accel(0.0f, -gravity, 0.0f);
+
+        // aerodynamic drag (very simple quadratic drag)
+        float vLen = glm::length(ballVel);
+        if (vLen > 1e-4f) {
+            glm::vec3 vHat = ballVel / vLen;
+            accel += -dragK * vLen * vLen * vHat; // opposes velocity
+        }
+
+        // magnus effect (spin-induced lift/curve)
+        // a_magnus ≈ magnusK * (omega × v)
+        accel += magnusK * glm::cross(ballOmega, ballVel);
+
+        // integrate
+        ballVel += accel * dt;
         // basic projectile motion; bounce lightly on ground
-        ballVel.y -= gravity * dt;
         ballPos += ballVel * dt;
 
         if (ballPos.y < groundY) {
